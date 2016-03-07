@@ -1,5 +1,7 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -11,10 +13,94 @@
 <html>
 <head>
 <base href="<%=basePath%>">
+<style type="text/css">
+.sortable {
+	width: 823px;
+	border: 1px solid #ccc;
+	border-bottom: none
+}
+
+.sortable th {
+	padding: 4px 6px 6px;
+	background: #444;
+	color: #fff;
+	text-align: left;
+	color: #ccc
+}
+
+.sortable td {
+	padding: 2px 4px 4px;
+	background: #fff;
+	border-bottom: 1px solid #ccc
+}
+
+.sortable .head {
+	background: #444 url(images/sort.gif) 6px center no-repeat;
+	cursor: pointer;
+	padding-left: 18px
+}
+
+.sortable .desc {
+	background: #222 url(images/desc.gif) 6px center no-repeat;
+	cursor: pointer;
+	padding-left: 18px
+}
+
+.sortable .asc {
+	background: #222 url(images/asc.gif) 6px center no-repeat;
+	cursor: pointer;
+	padding-left: 18px
+}
+
+.sortable .head:hover,.sortable .desc:hover,.sortable .asc:hover {
+	color: #fff
+}
+
+.sortable .even td {
+	background: #f2f2f2
+}
+
+.sortable .odd td {
+	background: #fff
+}
+</style>
 <script src="<%=basePath%>UI/js/calendar.js" type="text/javascript"></script>
 <script type="text/javascript">
 	function formReset() {
 		document.getElementById("frmfindId").reset();
+	}
+</script>
+<script type="text/javascript">
+	function load() {
+		var tagOrder = document.getElementById('txtOrder');
+		var thDate = document.getElementById('thDate');
+		if (tagOrder.value == "ASC") {
+			thDate.className = "asc";
+		} else {
+			thDate.className = "desc";
+		}
+	}
+</script>
+
+<script type="text/javascript">
+	function order() {
+		var tagOrder = document.getElementById('txtOrder');
+		var thDate = document.getElementById('thDate');
+		if (tagOrder.value == "ASC") {
+			tagOrder.value = "DESC";
+			thDate.className = "desc";
+		} else {
+			tagOrder.value = "ASC";
+			thDate.className = "asc";
+		}
+
+		document.getElementById('frmfindId').submit();
+	}
+</script>
+<script type="text/javascript" src="UI/js/jquery-2.2.1.js"></script>
+<script type="text/javascript">
+	function test() {
+		$("frmfindId").submit;
 	}
 </script>
 <title>user list page</title>
@@ -25,14 +111,16 @@
 <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 <meta http-equiv="description" content="This is my page">
 </head>
-<body>
-	<form action="query.action" method="post" id="frmfindId">
+<body onload="load()">
+	<form name="formQuery" action="query.action" method="post"
+		id="frmfindId">
 		<table align="center">
 			<tr>
+				<td><input name="tOrder" id="txtOrder" value="${order }" /></td>
 				<td align="right">收信人</td>
 				<td align="left"><input name="txtRecipient" type="text"
 					style="width: 180px;" value="${recipient }" /></td>
-				<td align="right">发送日期</td>
+				<td align="right" style="h1">发送日期</td>
 				<td align="left"><input name="txtDateStart" type="text"
 					style="width: 180px;" value="${dateStart }"
 					onClick="new Calendar('1900',  '<%=Calendar.getInstance().get(1)%>', 0).show(this)"
@@ -45,31 +133,35 @@
 				<td align="right">发送内容</td>
 				<td align="left"><input name="txtContext" type="text"
 					style="width: 180px;" value="${Context }" /></td>
-				<td><input type="submit" value="查询"
+				<td><input id="btnQuery" type="submit" value="查询"
 					style="width: 100px;height: 30px;font-size: 16px" /></td>
-				<td><input type="button" value="重置" onclick="formReset()" /></td>
+				<td><input type="button" value="重置" onclick="formReset()"
+					style="width: 100px;height: 30px;font-size: 16px" />
+				</td>
 			</tr>
 		</table>
 	</form>
 
-	<table align="center" border="1" cellpadding="0" cellspacing="0"
-		bordercolor="#3366cc">
-		<tr align="center" bgcolor="#3399cc" height="26px">
-			<td width="30">序号</td>
-			<td width="100">发送日期</td>
-			<td width="100">收信人</td>
-			<td width="100">手机号码</td>
-			<td width="300">发送内容</td>
-			<td width="100">操作</td>
+	<table id="sorter" class="sortable">
+		<tr>
+			<th width="50">序号</th>
+			<th id="thDate" width="100" class='asc' onclick="order()">发送日期</th>
+			<th width="100">收信人</th>
+			<th width="100">手机号码</th>
+			<th width="300">发送内容</th>
+			<th width="100">操作</th>
 		</tr>
 
 		<c:forEach var="msg" items="${mList }">
-			<tr align="center" height="24px">
+			<tr>
 				<td width="30">${msg.id}</td>
-				<td width="100">${msg.date}</td>
+				<td width="100"><fmt:formatDate type="date" value="${msg.date}"
+						dateStyle="default" />
+				</td>
 				<td width="100">${msg.recName}</td>
 				<td width="100">${msg.telNum}</td>
 				<td width="100">${msg.context}</td>
+				<td><a href="delete.action?id=${msg.id}">删除</a></td>
 			</tr>
 		</c:forEach>
 	</table>

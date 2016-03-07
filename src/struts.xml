@@ -3,12 +3,8 @@
 <struts>
 	<constant name="struts.objectFactory" value="spring" />
 	<package name="MySSH" extends="struts-default">
-		<global-results>
-			<result name="error">/jsp/error.jsp</result>
-		</global-results>
-
 		<action name="query" class="userAct" method="doQuery">
-			<result name="success">/jsp/success.jsp</result>
+			<result name="SUCCESS">/jsp/success.jsp</result>
 		</action>
 		<action name="delete" class="userAct" method="doDelete" />
 		<action name="edit" class="userAct" method="doEdit">

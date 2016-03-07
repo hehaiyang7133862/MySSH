@@ -8,7 +8,7 @@ public class historyMsg implements java.io.Serializable {
 	private static final long serialVersionUID = 5866268712137826050L;
 
 	private Integer id;
-	private String date;
+	private Date date;
 	private String recName;
 	private String telNum;
 	private String year;
@@ -27,18 +27,11 @@ public class historyMsg implements java.io.Serializable {
 	}
 
 	public Date getDate() {
-		Date dt;
-		try {
-			dt = (new SimpleDateFormat("yyyy-MM-dd")).parse(this.date);
-		} catch (Exception e) {
-
-			dt = new Date();
-		}
-		return dt;
+		return this.date;
 	}
 
 	public void setDate(Date date) {
-		this.date = (new SimpleDateFormat("yyyy-MM-dd")).format(date);
+		this.date = date;
 	}
 
 	public String getRecName() {

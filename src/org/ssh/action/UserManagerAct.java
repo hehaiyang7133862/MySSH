@@ -2,6 +2,9 @@ package org.ssh.action;
 
 import java.util.List;
 
+import javax.print.Doc;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.struts2.ServletActionContext;
 import org.ssh.pojo.historyMsg;
 import org.ssh.service.MessageManagerService;
@@ -26,15 +29,19 @@ public class UserManagerAct extends ActionSupport {
 	private String dateStart;
 	private String dateEnd;
 	private String context;
+	private String order;
 
 	public String doQuery() {
-
 		recipient = getParam("txtRecipient");
 		dateStart = getParam("txtDateStart");
 		dateEnd = getParam("txtDateEnd");
 		context = getParam("txtContext");
-		
-		mList = service.queryMsg(recipient, dateStart, dateEnd, context);
+		order = getParam("tOrder");
+
+		System.out.println("success!");
+		mList = service.queryMsg(recipient, dateStart, dateEnd, context, order);
+
+		System.out.println("success2");
 		
 		return SUCCESS;
 	}
@@ -71,13 +78,14 @@ public class UserManagerAct extends ActionSupport {
 		return doQuery();
 	}
 
-	public String doDelete() {
-		try {
-			Integer param = Integer.parseInt(getParam("id"));
-			service.deleteUser(param, historyMsg.class);
-		} catch (Exception e) {
-			e.printStackTrace();
+	public String doDelete() throws NumberFormatException, Exception {
+		String id = getParam("id");
+		if (id == null || "".equals(id)) {
+			return null;
 		}
+
+		Integer param = Integer.parseInt(id);
+		service.deleteUser(param, historyMsg.class);
 		return doQuery();
 	}
 
@@ -109,31 +117,19 @@ public class UserManagerAct extends ActionSupport {
 		return recipient;
 	}
 
-	public void setrecipient() {
-		this.recipient = recipient;
-	}
-
 	public String getdateStart() {
 		return dateStart;
-	}
-
-	public void setdateStart() {
-		this.dateStart = dateStart;
 	}
 
 	public String getdateEnd() {
 		return dateEnd;
 	}
 
-	public void setdateEnd() {
-		this.dateEnd = dateEnd;
-	}
-
 	public String getcontext() {
 		return context;
 	}
 
-	public void setcontext() {
-		this.context = context;
+	public String getOrder() {
+		return order;
 	}
 }

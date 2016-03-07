@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.ssh.dao.BaseDao;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 /**
  * 用户管理业务逻辑的实现
  * */
@@ -28,50 +30,58 @@ public class MessageManagerService<T> {
 	}
 
 	public List<T> queryMsg(String recipient, String dateStart, String dateEnd,
-			String context) {
-		String queryString = "SELECT m FROM historyMsg m ";
+			String context, String order) {
 
+		String queryString = "SELECT m FROM historyMsg m ";
 		boolean isNull = true;
 
-		if ((recipient.length() != 0) || (dateStart.length() != 0)
-				|| (dateEnd.length() != 0) || (context.length() != 0)) {
-			queryString += "WHERE ";
-
-			if (recipient.length() != 0) {
-				if (isNull == false) {
-					queryString += "AND ";
-				}
-				queryString += "m.recName = '" + recipient + "'";
-				isNull = false;
+		if (recipient != null && !"".equals(recipient)) {
+			if (isNull == false) {
+				queryString += "AND ";
+			} else {
+				queryString += "WHERE ";
 			}
+			queryString += "m.recName = '" + recipient + "'";
+			isNull = false;
+		}
 
-			if (dateStart.length() != 0) {
-				if (isNull == false) {
-					queryString += "AND ";
-				}
-				queryString += "m.date > '" + dateStart + "'";
-				isNull = false;
+		if (dateStart != null && !"".equals(dateStart)) {
+			if (isNull == false) {
+				queryString += "AND ";
+			} else {
+				queryString += "WHERE ";
 			}
+			queryString += "m.date > '" + dateStart + "'";
+			isNull = false;
+		}
 
-			if (dateEnd.length() != 0) {
-				if (isNull == false) {
-					queryString += "AND ";
-				}
-				queryString += "m.date < '" + dateEnd + "'";
-				isNull = false;
+		if (dateEnd != null && !"".equals(dateEnd)) {
+			if (isNull == false) {
+				queryString += "AND ";
+			} else {
+				queryString += "WHERE ";
 			}
+			queryString += "m.date < '" + dateEnd + "'";
+			isNull = false;
+		}
 
-			if (context.length() != 0) {
-				if (isNull == false) {
-					queryString += "AND ";
-				}
-				queryString += "m.context like '%" + context + "%'";
+		if (context != null && !"".equals(context)) {
+			if (isNull == false) {
+				queryString += "AND ";
+			} else {
+				queryString += "WHERE ";
+			}
+			queryString += "m.context like '%" + context + "%'";
+		}
+
+		queryString += "ORDER BY DATE ";
+		if (order != null && !"".equals(context)) {
+			if (order.equals(new String("DESC"))) {
+				queryString += "DESC";
 			}
 		}
 
-//		// queryString += "ORDER BY DATE";
-//		// if(order == "DESC"){ queryString +="DESC";}
-		
+		System.out.println(queryString);
 		return dao.getObjects(queryString);
 	}
 
