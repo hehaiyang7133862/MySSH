@@ -34,6 +34,7 @@ public class UserManagerAct extends ActionSupport {
 	private String order;
 
 	private PageBean pageBean;
+	private int page = 1;
 
 	public String doQuery() {
 		recipient = getParam("txtRecipient");
@@ -47,8 +48,14 @@ public class UserManagerAct extends ActionSupport {
 		 * order);
 		 */
 
+		String strPage = getParam("page");
+		try {
+			page = Integer.parseInt(strPage);
+		} catch (Exception e) {
+		}
+
 		this.pageBean = service.queryForPage(recipient, dateStart, dateEnd,
-				context, order, 5, 1);// 获取封装了分页信息和数据的pageBean
+				context, order, 5, this.page);// 获取封装了分页信息和数据的pageBean
 		mList = this.pageBean.getList(); // 获取数据
 
 		return INPUT;
@@ -82,7 +89,6 @@ public class UserManagerAct extends ActionSupport {
 
 	public String doEdit() {
 		try {
-			System.out.println("this is edit!");
 			Integer param = Integer.parseInt(getParam("param"));
 			if (param == 0) {
 				Integer id = Integer.parseInt(getParam("id"));
