@@ -1,5 +1,7 @@
 package org.ssh.action;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.print.Doc;
@@ -8,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts2.ServletActionContext;
 import org.ssh.pojo.historyMsg;
 import org.ssh.service.MessageManagerService;
+import org.ssh.util.PageBean;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
@@ -22,7 +25,6 @@ public class UserManagerAct extends ActionSupport {
 	private historyMsg msg = new historyMsg();
 
 	private MessageManagerService<historyMsg> service;
-
 	private List<historyMsg> mList;
 
 	private String recipient;
@@ -31,19 +33,25 @@ public class UserManagerAct extends ActionSupport {
 	private String context;
 	private String order;
 
+	private PageBean pageBean;
+
 	public String doQuery() {
 		recipient = getParam("txtRecipient");
 		dateStart = getParam("txtDateStart");
 		dateEnd = getParam("txtDateEnd");
 		context = getParam("txtContext");
-		order = getParam("tOrder");
+		order = getParam("tbOrder");
 
-		System.out.println("success!");
-		mList = service.queryMsg(recipient, dateStart, dateEnd, context, order);
+		/*
+		 * mList = service.queryMsg(recipient, dateStart, dateEnd, context,
+		 * order);
+		 */
 
-		System.out.println("success2");
-		
-		return SUCCESS;
+		this.pageBean = service.queryForPage(recipient, dateStart, dateEnd,
+				context, order, 5, 1);// 获取封装了分页信息和数据的pageBean
+		mList = this.pageBean.getList(); // 获取数据
+
+		return INPUT;
 	}
 
 	public String doAdd() {
@@ -51,7 +59,16 @@ public class UserManagerAct extends ActionSupport {
 		try {
 			String param = getParam("param");
 			if (Integer.parseInt(param) > 0) {
+
 				msg.setId(0);
+				msg.setDate((new SimpleDateFormat("yyyy-MM-dd"))
+						.parse(getParam("tbDate")));
+				msg.setRecName(getParam("tbRecName"));
+				msg.setTelNum(getParam("tbTelNum"));
+				msg.setYear(getParam("tbYear"));
+				msg.setSpecialty(getParam("tbSpecialty"));
+				msg.setContext(getParam("tbContext"));
+
 				service.addUser(msg);
 				result = doQuery();
 			} else
@@ -59,17 +76,28 @@ public class UserManagerAct extends ActionSupport {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 		return result;
 	}
 
 	public String doEdit() {
 		try {
+			System.out.println("this is edit!");
 			Integer param = Integer.parseInt(getParam("param"));
 			if (param == 0) {
 				Integer id = Integer.parseInt(getParam("id"));
 				msg = service.getUser(historyMsg.class, id);
 				return "editUser";
 			} else if (param == 1) {
+
+				msg.setId(Integer.parseInt(getParam("tbId")));
+				msg.setDate((new SimpleDateFormat("yyyy-MM-dd"))
+						.parse(getParam("tbDate")));
+				msg.setRecName(getParam("tbRecName"));
+				msg.setTelNum(getParam("tbTelNum"));
+				msg.setYear(getParam("tbYear"));
+				msg.setSpecialty(getParam("tbSpecialty"));
+				msg.setContext(getParam("tbContext"));
 				service.modifyUser(msg);
 			}
 		} catch (Exception e) {
@@ -105,12 +133,16 @@ public class UserManagerAct extends ActionSupport {
 		return mList;
 	}
 
-	public historyMsg getUser() {
+	public historyMsg getMsg() {
 		return msg;
 	}
 
-	public void setUser(historyMsg user) {
-		this.msg = user;
+	public void setMsg(historyMsg msg) {
+		this.msg = msg;
+	}
+
+	public PageBean getPageBean() {
+		return pageBean;
 	}
 
 	public String getrecipient() {

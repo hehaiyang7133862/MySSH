@@ -64,12 +64,23 @@
 	background: #fff
 }
 </style>
+<%-- <script src="<%=basePath%>UI/js/jquery-1.12.1.js" type="text/javascript"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#btnReset").click(function() {
+			$("p").css("background-color", "red");
+		});
+	});
+</script> --%>
+
 <script src="<%=basePath%>UI/js/calendar.js" type="text/javascript"></script>
+<script src="<%=basePath%>UI/js/ext-my.js" type="text/javascript"></script>
 <script type="text/javascript">
 	function formReset() {
 		document.getElementById("frmfindId").reset();
 	}
 </script>
+
 <script type="text/javascript">
 	function load() {
 		var tagOrder = document.getElementById('txtOrder');
@@ -94,15 +105,10 @@
 			thDate.className = "asc";
 		}
 
-		document.getElementById('frmfindId').submit();
+		document.getElementById('formQuery').submit();
 	}
 </script>
-<script type="text/javascript" src="UI/js/jquery-2.2.1.js"></script>
-<script type="text/javascript">
-	function test() {
-		$("frmfindId").submit;
-	}
-</script>
+
 <title>user list page</title>
 
 <meta http-equiv="pragma" content="no-cache">
@@ -112,31 +118,41 @@
 <meta http-equiv="description" content="This is my page">
 </head>
 <body onload="load()">
-	<form name="formQuery" action="query.action" method="post"
+	<form name="formQuery" action="query.action" method="get"
 		id="frmfindId">
 		<table align="center">
 			<tr>
-				<td><input name="tOrder" id="txtOrder" value="${order }" /></td>
+				<td><input name="tbOrder" id="txtOrder" value="${order }" />
+				</td>
 				<td align="right">收信人</td>
 				<td align="left"><input name="txtRecipient" type="text"
-					style="width: 180px;" value="${recipient }" /></td>
+					style="width: 180px;" value="${recipient }" />
+				</td>
 				<td align="right" style="h1">发送日期</td>
 				<td align="left"><input name="txtDateStart" type="text"
 					style="width: 180px;" value="${dateStart }"
 					onClick="new Calendar('1900',  '<%=Calendar.getInstance().get(1)%>', 0).show(this)"
-					class="ele_date" /></td>
+					class="ele_date" />
+				</td>
 				<td align="right">至</td>
 				<td align="left"><input name="txtDateEnd" type="text"
 					style="width: 180px;" value="${dateEnd }"
 					onClick=" new Calendar('1900',  '<%=Calendar.getInstance().get(1)%>', 0).show(this)"
-					class="ele_date" /></td>
+					class="ele_date" />
+				</td>
 				<td align="right">发送内容</td>
 				<td align="left"><input name="txtContext" type="text"
-					style="width: 180px;" value="${Context }" /></td>
+					style="width: 180px;" value="${Context }" />
+				</td>
 				<td><input id="btnQuery" type="submit" value="查询"
-					style="width: 100px;height: 30px;font-size: 16px" /></td>
-				<td><input type="button" value="重置" onclick="formReset()"
 					style="width: 100px;height: 30px;font-size: 16px" />
+				</td>
+				<td><input id="btnReset" type="button" value="重置"
+					style="width: 100px;height: 30px;font-size: 16px"
+					onclick="formReset()" /></td>
+				<td><input type="button" value="添加"
+					style="width: 100px;height: 30px;font-size: 16px"
+					onclick="window.location.href='add.action?param=0'" />
 				</td>
 			</tr>
 		</table>
@@ -156,14 +172,23 @@
 			<tr>
 				<td width="30">${msg.id}</td>
 				<td width="100"><fmt:formatDate type="date" value="${msg.date}"
-						dateStyle="default" />
-				</td>
+						dateStyle="default" /></td>
 				<td width="100">${msg.recName}</td>
 				<td width="100">${msg.telNum}</td>
 				<td width="100">${msg.context}</td>
-				<td><a href="delete.action?id=${msg.id}">删除</a></td>
+				<td><a href="edit.action?param=0&id=${msg.id}">编辑</a>&nbsp;&nbsp;<a
+					href="delete.action?id=${msg.id}">删除</a>
+				</td>
 			</tr>
 		</c:forEach>
+	</table>
+	<table>
+		<tr>
+			<td colspan="6" align="center" bgcolor="#5BA8DE">共${pageBean.allRow
+				}条记录 共${pageBean.totalPage }页 当前第${pageBean.currentPage }页<br>
+				<% if ${pageBean.currentPage } %>
+			</td>
+		</tr>
 	</table>
 </body>
 </html>

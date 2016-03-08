@@ -4,15 +4,19 @@
 	<constant name="struts.objectFactory" value="spring" />
 	<package name="MySSH" extends="struts-default">
 		<action name="query" class="userAct" method="doQuery">
-			<result name="SUCCESS">/jsp/success.jsp</result>
+			<result name="input">/jsp/success.jsp</result>
 		</action>
-		<action name="delete" class="userAct" method="doDelete" />
+		<action name="delete" class="userAct" method="doDelete">
+			<result name="input">/jsp/success.jsp</result>
+		</action>
 		<action name="edit" class="userAct" method="doEdit">
 			<result name="editUser">/jsp/editUser.jsp</result>
+			<result name="input">/jsp/success.jsp</result>
 		</action>
 
 		<action name="add" class="userAct" method="doAdd">
 			<result name="addUser">/jsp/addUser.jsp</result>
+			<result name="input">/jsp/success.jsp</result>
 		</action>
 	</package>
 </struts>    

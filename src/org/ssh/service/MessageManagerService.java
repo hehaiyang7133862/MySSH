@@ -2,7 +2,10 @@ package org.ssh.service;
 
 import java.util.List;
 
+import org.apache.commons.validator.Msg;
 import org.ssh.dao.BaseDao;
+import org.ssh.pojo.historyMsg;
+import org.ssh.util.PageBean;
 
 import com.sun.org.apache.bcel.internal.generic.NEW;
 
@@ -29,13 +32,13 @@ public class MessageManagerService<T> {
 		return dao.getObjects(queryString);
 	}
 
-	public List<T> queryMsg(String recipient, String dateStart, String dateEnd,
-			String context, String order) {
+	public PageBean queryForPage(String recipient, String dateStart,
+			String dateEnd, String context, String order, int pageSize, int page) {
 
 		String queryString = "SELECT m FROM historyMsg m ";
 		boolean isNull = true;
 
-		if (recipient != null && !"".equals(recipient)) {
+		if (recipient != null && recipient.length() != 0) {
 			if (isNull == false) {
 				queryString += "AND ";
 			} else {
@@ -45,7 +48,7 @@ public class MessageManagerService<T> {
 			isNull = false;
 		}
 
-		if (dateStart != null && !"".equals(dateStart)) {
+		if (dateStart != null && dateStart.length() != 0) {
 			if (isNull == false) {
 				queryString += "AND ";
 			} else {
@@ -55,7 +58,7 @@ public class MessageManagerService<T> {
 			isNull = false;
 		}
 
-		if (dateEnd != null && !"".equals(dateEnd)) {
+		if (dateEnd != null && dateEnd.length() != 0) {
 			if (isNull == false) {
 				queryString += "AND ";
 			} else {
@@ -65,7 +68,7 @@ public class MessageManagerService<T> {
 			isNull = false;
 		}
 
-		if (context != null && !"".equals(context)) {
+		if (context != null && context.length() != 0) {
 			if (isNull == false) {
 				queryString += "AND ";
 			} else {
@@ -75,8 +78,77 @@ public class MessageManagerService<T> {
 		}
 
 		queryString += "ORDER BY DATE ";
-		if (order != null && !"".equals(context)) {
-			if (order.equals(new String("DESC"))) {
+		if (order != null) {
+			if (order.equals("DESC")) {
+				queryString += "DESC";
+			}
+		}
+		int allRow = dao.getAllRowCount(queryString); // 总记录数
+		int totalPage = PageBean.countTatalPage(pageSize, allRow); // 总页数
+		final int offset = PageBean.countOffset(pageSize, page); // 当前页开始记录
+		final int length = pageSize; // 每页记录数
+		final int currentPage = PageBean.countCurrentPage(page); // 当前页
+		List<historyMsg> list = dao.queryForPage(queryString, offset, length); //
+		// 把分页信息保存到Bean当中
+		PageBean pageBean = new PageBean();
+		pageBean.setPageSize(pageSize);
+		pageBean.setCurrentPage(currentPage);
+		pageBean.setAllRow(allRow);
+		pageBean.setTotalPage(totalPage);
+		pageBean.setList(list);
+
+		return pageBean;
+
+	}
+
+	public List<T> queryMsg(String recipient, String dateStart, String dateEnd,
+			String context, String order) {
+
+		String queryString = "SELECT m FROM historyMsg m ";
+		boolean isNull = true;
+
+		if (recipient != null && recipient.length() != 0) {
+			if (isNull == false) {
+				queryString += "AND ";
+			} else {
+				queryString += "WHERE ";
+			}
+			queryString += "m.recName = '" + recipient + "'";
+			isNull = false;
+		}
+
+		if (dateStart != null && dateStart.length() != 0) {
+			if (isNull == false) {
+				queryString += "AND ";
+			} else {
+				queryString += "WHERE ";
+			}
+			queryString += "m.date > '" + dateStart + "'";
+			isNull = false;
+		}
+
+		if (dateEnd != null && dateEnd.length() != 0) {
+			if (isNull == false) {
+				queryString += "AND ";
+			} else {
+				queryString += "WHERE ";
+			}
+			queryString += "m.date < '" + dateEnd + "'";
+			isNull = false;
+		}
+
+		if (context != null && context.length() != 0) {
+			if (isNull == false) {
+				queryString += "AND ";
+			} else {
+				queryString += "WHERE ";
+			}
+			queryString += "m.context like '%" + context + "%'";
+		}
+
+		queryString += "ORDER BY DATE ";
+		if (order != null) {
+			if (order.equals("DESC")) {
 				queryString += "DESC";
 			}
 		}
