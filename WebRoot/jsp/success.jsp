@@ -118,6 +118,7 @@
 <meta http-equiv="description" content="This is my page">
 </head>
 <body onload="load()">
+<p>gitTest</p>
 	<form name="formQuery" action="query.action" method="get"
 		id="frmfindId">
 		<table align="center">
