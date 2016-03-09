@@ -74,7 +74,18 @@
 </script> --%>
 
 <script src="<%=basePath%>UI/js/calendar.js" type="text/javascript"></script>
+
+<!-- EXT -->
+<link href="<%=basePath%>UI/ext/resources/css/ext-all.css"
+	type="text/css" rel="stylesheet" />
+<script src="<%=basePath%>UI/ext/adapter/ext/ext-base.js"
+	type="text/javascript"></script>
+<script src="<%=basePath%>UI/ext/ext-all.js" type="text/javascript"></script>
+<script
+	src="<%=basePath%>UI/ext/adapter/treenodecheckui/TreeCheckNodeUI.js"
+	type="text/javascript"></script>
 <script src="<%=basePath%>UI/js/ext-my.js" type="text/javascript"></script>
+
 <script type="text/javascript">
 	function formReset() {
 		document.getElementById("frmfindId").reset();
@@ -118,7 +129,7 @@
 <meta http-equiv="description" content="This is my page">
 </head>
 <body onload="load()">
-<p>gitTest</p>
+	<p>gitTest</p>
 	<form name="formQuery" action="query.action" method="get"
 		id="frmfindId">
 		<table align="center">
@@ -128,29 +139,34 @@
 				</td>
 				<td align="right">收信人</td>
 				<td align="left"><input name="txtRecipient" type="text"
-					style="width: 180px;" value="${recipient }" /></td>
+					style="width: 180px;" value="${recipient }" />
+				</td>
 				<td align="right" style="h1">发送日期</td>
 				<td align="left"><input name="txtDateStart" type="text"
 					style="width: 180px;" value="${dateStart }"
 					onClick="new Calendar('1900',  '<%=Calendar.getInstance().get(1)%>', 0).show(this)"
-					class="ele_date" /></td>
+					class="ele_date" />
+				</td>
 				<td align="right">至</td>
 				<td align="left"><input name="txtDateEnd" type="text"
 					style="width: 180px;" value="${dateEnd }"
 					onClick=" new Calendar('1900',  '<%=Calendar.getInstance().get(1)%>', 0).show(this)"
-					class="ele_date" /></td>
+					class="ele_date" />
+				</td>
 				<td align="right">发送内容</td>
 				<td align="left"><input name="txtContext" type="text"
-					style="width: 180px;" value="${Context }" /></td>
+					style="width: 180px;" value="${Context }" />
+				</td>
 				<td><input id="btnQuery" type="submit" value="查询"
-					style="width: 100px;height: 30px;font-size: 16px" /></td>
+					style="width: 100px;height: 30px;font-size: 16px" />
+				</td>
 				<td><input id="btnReset" type="button" value="重置"
 					style="width: 100px;height: 30px;font-size: 16px"
-					onclick="formReset()" />
-				</td>
+					onclick="formReset()" /></td>
 				<td><input type="button" value="添加"
 					style="width: 100px;height: 30px;font-size: 16px"
-					onclick="window.location.href='add.action?param=0'" /></td>
+					onclick="window.location.href='add.action?param=0'" />
+				</td>
 			</tr>
 		</table>
 	</form>
@@ -169,13 +185,15 @@
 			<tr>
 				<td width="30">${msg.id}</td>
 				<td width="100"><fmt:formatDate type="date" value="${msg.date}"
-						dateStyle="default" />
-				</td>
+						dateStyle="default" /></td>
 				<td width="100">${msg.recName}</td>
 				<td width="100">${msg.telNum}</td>
 				<td width="100">${msg.context}</td>
-				<td><a href="edit.action?param=0&id=${msg.id}">编辑</a>&nbsp;&nbsp;<a
-					href="delete.action?id=${msg.id}" onclick="return confirm('确定要删除吗？')">删除</a></td>
+				<td><a href="javascript:void(0)"
+					onclick='MyFormWin.showMyWin("编辑","edit.action?param=0&id=${msg.id}",600,340);return false;'>编辑</a>&nbsp;
+					<a href="delete.action?id=${msg.id}"
+					onclick="return confirm('确定要删除吗？')">删除</a>
+				</td>
 			</tr>
 		</c:forEach>
 	</table>
@@ -197,7 +215,8 @@
 						<a href="query.action?page=${pageBean.currentPage +1}">下一页</a>
 						<a href="query.action?page=${pageBean.totalPage}">最后一页</a>
 					</c:otherwise>
-				</c:choose></td>
+				</c:choose>
+			</td>
 		</tr>
 	</table>
 </body>
