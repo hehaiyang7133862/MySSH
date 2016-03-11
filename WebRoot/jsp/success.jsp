@@ -84,6 +84,10 @@
 	}
 </script>
 
+<script language="JavaScript">
+	
+</script>
+
 <script type="text/javascript">
 	function load() {
 		var tagOrder = document.getElementById('txtOrder');
@@ -108,37 +112,37 @@
 			thDate.className = "asc";
 		}
 
-		document.getElementById('formQuery').submit();
+		document.getElementById('frmfindId').submit();
 	}
 </script>
 
-<script src="<%=basePath%>UI/js/jquery-1.12.1.js" type="text/javascript"></script>
+<script src="<%=basePath%>UI/js/jquery.js" type="text/javascript"></script>
 <script type="text/javascript">
-$(document).ready(function(){ 
-	$('#btnQuery').click(function(){
-		var msg="";
-			$("p").html("1");
-		var startTime= $('#txtDateStart').val().tostring
-		var endTime = $('#txtDateEnd').val();
-		
-			$("p").html(startTime +"sss"+endTime);
-		if((startTime==""&&endTime != "")||(startTime!=""&&endTime == ""))
-		{
-			msg += "发送日期必须成对出现!";
+	$(document).ready(function() {
+		$('#btnQuery').click(function() {
+			$("#tbStartTime").css("background-color", "none");
+			$("tbEndTime").css("background-color", "none");
 			
-			$("p").html("3");
-			$('#txtDateStart').css("background-color","yellow");
-			$('#txtDateEnd').css("background-color","yellow");
-		}
-		
-		if(msg!= ""){
-			return false;
-		}
-		else{ 
-			return true;
-		}
+			var msg = "";
+			var startTime = $("#tbStartTime").val();
+			var endTime = $("#tbEndTime").val();
+			
+			if ((startTime == "" && endTime != "")|| (startTime != "" && endTime == "")) {
+				msg += "发送日期必须成对出现!";
+				$("#tbStartTime").css("background-color", "red");
+				$("tbEndTime").css("background-color", "red");
+				Ext.Msg.alert("错误信息", msg);}
+			
+			if (msg != "") {
+				return false;}
+			else {
+				return true;}
+		});
 	});
-});
+
+	function refresh() {
+		$("#frmfindId").submit();
+	}
 </script>
 
 <title>user list page</title>
@@ -150,37 +154,42 @@ $(document).ready(function(){
 <meta http-equiv="description" content="This is my page">
 </head>
 <body onload="load()">
-	<p id="testP">test</p>
 	<form name="formQuery" action="query.action" method="get"
 		id="frmfindId">
 		<table align="center">
 			<tr>
 				<td><input type="hidden" name="tbOrder" id="txtOrder"
-					value="${order }" /> <input type="hidden" name="page" value="1" />
+					value="${order }" /> <input type="hidden" name="page"
+					value="${pageBean.currentPage}" />
 				</td>
 				<td align="right">收信人</td>
 				<td align="left"><input name="txtRecipient" type="text"
-					style="width: 180px;" value="${recipient }" /></td>
+					style="width: 180px;" value="${recipient }" />
+				</td>
 				<td align="right" style="h1">发送日期</td>
-				<td align="left"><input name="txtDateStart" type="text"
-					style="width: 180px;" value="${dateStart }"
-					onClick="new Calendar().show(this);" readonly="readonly" /></td>
+				<td align="left"><input id="tbStartTime" name="txtDateStart"
+					type="text" style="width: 180px;" value="${dateStart }"
+					onClick="new Calendar().show(this);" readonly="readonly" />
+				</td>
 				<td align="right">至</td>
-				<td align="left"><input name="txtDateEnd" type="text"
-					style="width: 180px;" value="${dateEnd }"
-					onClick="new Calendar().show(this);" readonly="readonly" /></td>
+				<td align="left"><input id="tbEndTime" name="txtDateEnd"
+					type="text" style="width: 180px;" value="${dateEnd }"
+					onClick="new Calendar().show(this);" readonly="readonly" />
+				</td>
 				<td align="right">发送内容</td>
 				<td align="left"><input name="txtContext" type="text"
-					style="width: 180px;" value="${Context }" /></td>
+					style="width: 180px;" value="${Context }" />
+				</td>
 				<td><input id="btnQuery" type="submit" value="查询"
-					style="width: 100px;height: 30px;font-size: 16px" /></td>
+					style="width: 100px;height: 30px;font-size: 16px" />
+				</td>
 				<td><input id="btnReset" type="button" value="重置"
 					style="width: 100px;height: 30px;font-size: 16px"
-					onclick="formReset()" />
-				</td>
+					onclick="formReset()" /></td>
 				<td><input type="button" value="添加"
 					style="width: 100px;height: 30px;font-size: 16px"
-					onclick="window.location.href='add.action?param=0'" /></td>
+					onclick='MyFormWin.showMyWin("添加短信记录","add.action?param=0",600,500)' />
+				</td>
 			</tr>
 		</table>
 	</form>
@@ -199,16 +208,14 @@ $(document).ready(function(){
 			<tr>
 				<td width="30">${msg.id}</td>
 				<td width="100"><fmt:formatDate type="date" value="${msg.date}"
-						dateStyle="default" />
-				</td>
+						dateStyle="default" /></td>
 				<td width="100">${msg.recName}</td>
 				<td width="100">${msg.telNum}</td>
 				<td width="100">${msg.context}</td>
 				<td><a href="javascript:void(0)"
-					onclick='MyFormWin.showMyWin("编辑","edit.action?param=0&id=${msg.id}",600,340)'>编辑</a>&nbsp;<a
-					href="delete.action?id=${msg.id}"
-					onclick="return confirm('确定要删除吗？')">删除</a>
-				</td>
+					onclick='MyFormWin.showMyWin("编辑","edit.action?param=0&id=${msg.id}",600,500)'>编辑</a>&nbsp;<a
+					href="delete.action?id=${msg.id}&page=${pageBean.currentPage}"
+					onclick="return confirm('确定要删除吗？')">删除</a></td>
 			</tr>
 		</c:forEach>
 	</table>
@@ -230,7 +237,8 @@ $(document).ready(function(){
 						<a href="query.action?page=${pageBean.currentPage +1}">下一页</a>
 						<a href="query.action?page=${pageBean.totalPage}">最后一页</a>
 					</c:otherwise>
-				</c:choose></td>
+				</c:choose>
+			</td>
 		</tr>
 	</table>
 </body>

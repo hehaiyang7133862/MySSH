@@ -14,6 +14,7 @@ import org.ssh.util.PageBean;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
+import com.sun.xml.internal.ws.api.streaming.XMLStreamReaderFactory.Default;
 
 /**
  * 用户管理控制器
@@ -36,6 +37,10 @@ public class UserManagerAct extends ActionSupport {
 	private PageBean pageBean;
 	private int page = 1;
 
+	public int getPage() {
+		return this.page;
+	}
+
 	public String doQuery() {
 		recipient = getParam("txtRecipient");
 		dateStart = getParam("txtDateStart");
@@ -49,6 +54,7 @@ public class UserManagerAct extends ActionSupport {
 		 */
 
 		String strPage = getParam("page");
+
 		try {
 			page = Integer.parseInt(strPage);
 		} catch (Exception e) {
@@ -61,12 +67,26 @@ public class UserManagerAct extends ActionSupport {
 		return INPUT;
 	}
 
+	public String doQuery(int page) {
+		recipient = getParam("txtRecipient");
+		dateStart = getParam("txtDateStart");
+		dateEnd = getParam("txtDateEnd");
+		context = getParam("txtContext");
+		order = getParam("tbOrder");
+
+		this.pageBean = service.queryForPage(recipient, dateStart, dateEnd,
+				context, order, 5, page);// 获取封装了分页信息和数据的pageBean
+		mList = this.pageBean.getList(); // 获取数据
+
+		return INPUT;
+	}
+
 	public String doAdd() {
 		String result = "";
 		try {
 			String param = getParam("param");
 			if (Integer.parseInt(param) > 0) {
-
+				System.out.println("this is add.Action!");
 				msg.setId(0);
 				msg.setDate((new SimpleDateFormat("yyyy-MM-dd"))
 						.parse(getParam("tbDate")));
@@ -77,7 +97,8 @@ public class UserManagerAct extends ActionSupport {
 				msg.setContext(getParam("tbContext"));
 
 				service.addUser(msg);
-				result = doQuery();
+
+				result = "back";
 			} else
 				result = "addUser";
 		} catch (Exception e) {
@@ -90,6 +111,7 @@ public class UserManagerAct extends ActionSupport {
 	public String doEdit() {
 		try {
 			Integer param = Integer.parseInt(getParam("param"));
+
 			if (param == 0) {
 				Integer id = Integer.parseInt(getParam("id"));
 				msg = service.getUser(historyMsg.class, id);
@@ -109,7 +131,8 @@ public class UserManagerAct extends ActionSupport {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return doQuery();
+
+		return "back";
 	}
 
 	public String doDelete() throws NumberFormatException, Exception {
@@ -120,7 +143,18 @@ public class UserManagerAct extends ActionSupport {
 
 		Integer param = Integer.parseInt(id);
 		service.deleteUser(param, historyMsg.class);
-		return doQuery();
+
+		int curPage = 1;
+		String strPage = getParam("page");
+
+		try {
+			curPage = Integer.parseInt(strPage);
+		} catch (Exception e) {
+		}
+
+		doQuery(curPage);
+
+		return "back";
 	}
 
 	protected String getParam(String key) {

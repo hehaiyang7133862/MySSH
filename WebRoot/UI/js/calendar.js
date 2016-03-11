@@ -11,18 +11,11 @@
  * @author  KimSoft (jinqinghua [at] gmail.com)
  * NOTE!    you can use it free, but keep the copyright please
  * IMPORTANT:you must include this script file inner html body elment 
- * @modify history
- * --------------------------------------------------------
- * @version 1.2 build 2012-05-08
- * @modifier	Jiang Xinglong (j2910@163.com, QQ 20819109)
- * @new		a) add onchange event of input box
- * 			b) change year selector width from 64px to 66px
- * 			c) change the data square background-clor whose value equals input box value
- * --------------------------------------------------------
+ * @see http://code.google.com/p/kimsoft-jscalendar/
  */
 function Calendar(beginYear, endYear, language, patternDelimiter, date2StringPattern, string2DatePattern) {
-	this.beginYear = beginYear || 1990;
-	this.endYear   = endYear   || 2020;
+	this.beginYear = beginYear || 1960;
+	this.endYear   = endYear   || 2050;
 	this.language  = language  || 0;
 	this.patternDelimiter = patternDelimiter     || "-";
 	this.date2StringPattern = date2StringPattern || Calendar.language["date2StringPattern"][this.language].replace(/\-/g, this.patternDelimiter);
@@ -96,6 +89,7 @@ Calendar.prototype.draw = function() {
 	_cs[_cs.length] = ' <\/tr>';
 	_cs[_cs.length] = '<\/table>';
 	_cs[_cs.length] = '<\/form>';
+	
 	this.iframe.document.body.innerHTML = _cs.join("");
 	this.form = this.iframe.document.forms["__calendarForm"];
 
@@ -198,35 +192,24 @@ Calendar.prototype.bindData = function () {
 		if (i > dateArray.length - 1) continue;
 		if (dateArray[i]){
 			tds[i].onclick = function () {
-				var oldVal = calendar.dateControl.value;//add by jxl: add onchange event
 				if (calendar.dateControl){
 					calendar.dateControl.value = new Date(calendar.date.getFullYear(),
 														calendar.date.getMonth(),
 														this.innerHTML).format(calendar.date2StringPattern);
 				}
 				calendar.hide();
-				//add by jxl: add onchange event
-				if(oldVal != calendar.dateControl.value){
-					if(calendar.dateControl.onchange){
-						calendar.dateControl.onchange();
+			}
+			tds[i].onmouseover = function () {this.style.backgroundColor = calendar.colors["bg_out"];}
+			tds[i].onmouseout  = function () {this.style.backgroundColor = calendar.colors["bg_over"];}
+			var today = new Date();
+			if (today.getFullYear() == calendar.date.getFullYear()) {
+				if (today.getMonth() == calendar.date.getMonth()) {
+					if (today.getDate() == dateArray[i]) {
+						tds[i].style.backgroundColor = calendar.colors["bg_cur_day"];
+						tds[i].onmouseover = function () {this.style.backgroundColor = calendar.colors["bg_out"];}
+						tds[i].onmouseout  = function () {this.style.backgroundColor = calendar.colors["bg_cur_day"];}
 					}
 				}
-				//add end 2012-05-07
-			}
-			
-			
-			var today = new Date();
-			//today
-			if (today.getFullYear() == calendar.date.getFullYear() && today.getMonth() == calendar.date.getMonth() && today.getDate() == dateArray[i]) {
-				tds[i].style.backgroundColor = calendar.colors["bg_cur_day"];
-				tds[i].onmouseover = function () {this.style.backgroundColor = calendar.colors["bg_out"];}
-				tds[i].onmouseout  = function () {this.style.backgroundColor = calendar.colors["bg_cur_day"];}
-			}else if(calendar.date.getDate() == dateArray[i]){
-				//modified by jxl 2012-05-06: the date cube on calender whose value == input.value
-				tds[i].style.backgroundColor = calendar.colors["bg_out"];
-			}else{//normal
-				tds[i].onmouseover = function () {this.style.backgroundColor = calendar.colors["bg_out"];}
-				tds[i].onmouseout  = function () {this.style.backgroundColor = calendar.colors["bg_over"];}
 			}
 		}//end if
 	}//end for
@@ -251,6 +234,7 @@ Calendar.prototype.show = function (dateControl, popuControl) {
 	}
 	this.dateControl = dateControl;
 	popuControl = popuControl || dateControl;
+
 	this.draw();
 	this.bindYear();
 	this.bindMonth();
@@ -262,7 +246,6 @@ Calendar.prototype.show = function (dateControl, popuControl) {
 	this.changeSelect();
 	this.bindData();
 
-	
 	var xy = this.getAbsPoint(popuControl);
 	this.panel.style.left = xy.x + "px";
 	this.panel.style.top = (xy.y + dateControl.offsetHeight) + "px";
@@ -357,7 +340,7 @@ __ci.document.writeln('select {font-size:12px;background-color:#EFEFEF;}');
 __ci.document.writeln('table {border:0px solid #CCCCCC;background-color:#FFFFFF}');
 __ci.document.writeln('th {font-size:12px;font-weight:normal;background-color:#FFFFFF;}');
 __ci.document.writeln('th.theader {font-weight:normal;background-color:#666666;color:#FFFFFF;width:24px;}');
-__ci.document.writeln('select.year {width:66px;}');//change by jxl: 64px -> 66px
+__ci.document.writeln('select.year {width:64px;}');
 __ci.document.writeln('select.month {width:60px;}');
 __ci.document.writeln('td {font-size:12px;text-align:center;}');
 __ci.document.writeln('td.sat {color:#0000FF;background-color:#EFEFEF;}');
@@ -374,12 +357,5 @@ __ci.document.writeln('<\/body>');
 __ci.document.writeln('<\/html>');
 __ci.document.close();
 document.writeln('<\/div>');
-
 var calendar = new Calendar();
 //-->
-/**
- * add by jiangxinglong, hide the calendar when click other area expcept the inputbox
- */
-document.onclick=function(){
-     if(calendar.dateControl != window.event.srcElement) calendar.hide();
-}

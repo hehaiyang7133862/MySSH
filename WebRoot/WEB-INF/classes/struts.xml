@@ -7,16 +7,18 @@
 			<result name="input">/jsp/success.jsp</result>
 		</action>
 		<action name="delete" class="userAct" method="doDelete">
-			<result name="input">/jsp/success.jsp</result>
+			<result name="back">/jsp/success.jsp</result>
 		</action>
 		<action name="edit" class="userAct" method="doEdit">
 			<result name="editUser">/jsp/editUser.jsp</result>
-			<result name="input">/jsp/success.jsp</result>
+			<result name="back">/jsp/success.jsp</result>
 		</action>
 
 		<action name="add" class="userAct" method="doAdd">
 			<result name="addUser">/jsp/addUser.jsp</result>
-			<result name="input">/jsp/success.jsp</result>
+			<result name="back">/jsp/closing.jsp</result>
+			<!-- <result name="back" type="redirectAction"> <param name="actionName">query</param> 
+				<param name="page">${page}</param> </result> -->
 		</action>
 	</package>
 </struts>    
