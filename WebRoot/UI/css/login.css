@@ -1,0 +1,162 @@
+@charset "utf-8";
+html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,blockquote,th,td{margin:0;padding:0;}img,body,html{border:0;}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal;}ol,ul,li {list-style:none;}caption,th {text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;}q:before,q:after{content:'';}textarea{resize:none;overflow-y:auto;}
+html{overflow:auto;}
+body{
+	font-size:13px;
+	font-family:Arial,Helvetica,sans-serif,"宋体";
+	text-align:center;
+	background-color:#0866a9;
+}
+.page{
+	margin:0 auto;
+	margin-top:80px;
+	margin-bottom:80px;
+	width:950px;
+	text-align:left;
+	overflow:hidden;
+}
+.head{
+	padding:0px 35px 0px 14px;
+	color:#ffffff;
+	overflow:hidden;
+}
+.head .banner{
+	text-align:left;
+	overflow:hidden;
+}
+.head .opt{
+	margin-top:-18px;
+	text-align:right;
+	overflow:hidden;
+}
+.head a,.head a:link,.head a:visited,.head a:active{
+	color:#ffffff;
+	text-decoration:none;
+}
+.head a:hover{
+	color:#ffffff;
+	text-decoration:underline;
+}
+.foot{
+	padding:0px 35px 0px 14px;
+	color:#ffffff;
+	overflow:hidden;
+}
+.foot .left{
+	float:left;
+	overflow:hidden;
+}
+.foot .right{
+	float:right;
+	overflow:hidden;
+}
+.foot a,.foot a:link,.foot a:visited,.foot a:active{
+	color:#ffffff;
+	text-decoration:none;
+}
+.foot a:hover{
+	color:#ffffff;
+	text-decoration:underline;
+}
+.body{
+	height:417px;
+	padding:15px 35px 18px 14px;
+	background-color:transparent;
+	background-image:url(../images/loginForm.jpg);
+	background-repeat:no-repeat;
+	background-position:left top;
+	overflow:hidden;
+}
+.body .loginForm{
+	float:left;
+	width:355px;
+	height:417px;
+	overflow:hidden;
+}
+.body .loginMemo{
+	float:left;
+	width:520px;
+	height:355px;
+	padding:33px 26px 29px 0px;
+	overflow:hidden;
+}
+.body .field1{
+	height:40px;
+	padding:66px 70px 0px 45px;
+	overflow:hidden;
+}
+.body .field2{
+	height:40px;
+	padding:16px 70px 0px 45px;
+	overflow:hidden;
+}
+.body .txt{
+	display:block;
+	width:240px;
+	height:40px;
+	line-height:40px;
+	border:0px;
+	background:transparent;
+	overflow:hidden;
+}
+.body .pwd{
+	font-family:"lucida grande",tahoma,verdana,arial,STHeiTi,simsun,sans-serif;
+}
+.body .placeholder{
+	position:absolute;
+	z-index:2;
+	height:40px;
+	line-height:40px;
+	margin-top:-40px;
+	color:#6e6d6f;
+	overflow:hidden;
+}
+.body .proofcode{
+	position:absolute;
+	z-index:2;
+	width:55px;
+	height:40px;
+	line-height:40px;
+	margin-top:-40px;
+	margin-left:215px;
+	text-align:center;
+	font-weight:bold; 
+	font-size:16px;
+	color:orange;
+	letter-spacing:2px;
+	cursor:pointer;
+	overflow:hidden;
+}
+.body .opt{
+	height:32px;
+	padding:55px 32px 0px 37px;
+	overflow:hidden;
+}
+.body .opt .btnSubmit{
+	float:left;
+	display:block;
+	width:173px;
+	height:32px;
+	border:0px;
+	background:transparent;
+	cursor:pointer;
+	overflow:hidden;
+}
+.body .opt .btnReset{
+	float:left;
+	display:block;
+	margin-left:25px;
+	width:86px;
+	height:32px;
+	border:0px;
+	background:transparent;
+	cursor:pointer;
+	overflow:hidden;
+}
+.body .notice{
+	height:32px;
+	padding:40px 34px 0px 37px;
+	color:#000000;
+	font-weight:bold;
+	overflow:hidden;
+}
