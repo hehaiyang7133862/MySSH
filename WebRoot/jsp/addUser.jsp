@@ -21,71 +21,51 @@
 
 <script src="<%=basePath%>UI/js/jquery.js" type="text/javascript"></script>
 <script type="text/javascript">
-	$(document).ready(
-			function() {
-				$("#id_btnSave")
-						.click(
-								function() {
-									init();
-
-									var result_date = true;
-									var result_recName = true;
-									var result_telNum = true;
-									var result_year = true;
-									var result_specialty = true;
-									var result_context = true;
-
-									var date = $("#id_date_input").val();
-									var recName = $("#id_recName_input").val();
-									var telNum = $("#id_telNum_input").val();
-									var year = $("#id_year_input").val();
-									var specialty = $("#id_specialty_input")
-											.val();
-									var context = $("#id_context_input").val();
-
-									if (date == "") {
-										result_date = false;
-										$("#id_date_tip").css("display",
-												"inline");
-									}
-									if (recName == "") {
-										result_recName = false;
-										$("#id_recName_tip").css("display",
-												"inline");
-									}
-									if (telNum == "") {
-										result_telNum = false;
-										$("#id_telNum_tip").css("display",
-												"inline");
-									}
-									if (year == "") {
-										result_year = false;
-										$("#id_year_tip").css("display",
-												"inline");
-									}
-									if (specialty == "") {
-										result_specialty = false;
-										$("#id_specialty_tip").css("display",
-												"inline");
-									}
-									if (context == "") {
-										result_context = false;
-										$("#id_context_tip").css("display",
-												"inline");
-									}
-
-									if (result_date && result_recName
-											&& result_telNum
-											&& result_specialty && result_year
-											&& result_context) {
-										$("id_form").submit();
-									} else {
-										return false;
-									}
-								});
-
-				init();
-			});
+	$(document).ready(function() {
+		$("#id_btnSave").click(function() {
+			init();
+			
+			var result_date = true;
+			var result_recName = true;
+			var result_telNum = true;
+			var result_year = true;
+			var result_specialty = true;
+			var result_context = true;
+			
+			var date = $("#id_date_input").val();
+			var recName = $("#id_recName_input").val();
+			var telNum = $("#id_telNum_input").val();
+			var year = $("#id_year_input").val();
+			var specialty = $("#id_specialty_input").val();
+			var context = $("#id_context_input").val();
+			
+			if (date == "") {
+				result_date = false;
+				$("#id_date_tip").css("display","inline");}
+			if (recName == "") {
+				result_recName = false;
+				$("#id_recName_tip").css("display","inline");}
+			if (telNum == "") {
+				result_telNum = false;
+				$("#id_telNum_tip").css("display","inline");}
+			if (year == "") {
+				result_year = false;
+				$("#id_year_tip").css("display","inline");}
+			if (specialty == "") {
+				result_specialty = false;
+				$("#id_specialty_tip").css("display","inline");}
+			if (context == "") {
+				result_context = false;
+				$("#id_context_tip").css("display","inline");}
+				
+			if (result_date && result_recName&& result_telNum&& result_specialty && result_year&& result_context) {
+				$("id_form").submit();} 
+			else {
+				return false;}
+		});
+			
+		init();
+	});
 
 	function init() {
 		$("#id_date_tip").css("display", "none");
@@ -95,22 +75,21 @@
 		$("#id_specialty_tip").css("display", "none");
 		$("#id_context_tip").css("display", "none");
 	}
-
-	function doUser() {
-		var url = "ajax!doUser.action";
-		var id1 = document.getElementById("userCardId").value;
-		if (id1 == "") {
+	
+	function doUser(){
+    	var url ="ajax!doUser.action";
+		var id1=document.getElementById("userCardId").value;
+		if(id1==""){
 			alert("请输入帐号!");
-			return;
-		}
+			return;}
 		$("#showId").html("");
-		var pars = {
-			id1 : id1
-		};
-		jQuery.get(url, pars, function(xml) {
-			document.getElementById("showId").innerHTML = xml;
-		}, "text");
-	}
+		var pars ={id1:id1};
+		jQuery.get(url,pars,function(xml){
+			document.getElementById("showId").innerHTML=xml;
+		},
+		"text"
+	);
+}
 </script>
 </head>
 <body>
@@ -168,8 +147,8 @@
 			</tr>
 			<tr height="35px">
 				<td width="150px" align="right">发送内容&nbsp;&nbsp;</td>
-				<td><input id="id_context_input" name="tbContext" type="text"
-					value="${msg.context }" />
+				<td><input id="id_context_input" name="tbContext"
+				type="text" value="${msg.context }" />
 				</td>
 				<td align="left"><div id="id_context_tip"
 						style="color:red;display:inline">内容不能为空</div>

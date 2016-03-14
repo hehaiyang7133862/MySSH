@@ -32,7 +32,7 @@ public class UserManagerAct extends ActionSupport {
 	private String recipient;
 	private String dateStart;
 	private String dateEnd;
-	private String context;
+	private String strContext;
 	private String order;
 
 	private PageBean pageBean;
@@ -46,13 +46,8 @@ public class UserManagerAct extends ActionSupport {
 		recipient = getParam("txtRecipient");
 		dateStart = getParam("txtDateStart");
 		dateEnd = getParam("txtDateEnd");
-		context = getParam("txtContext");
+		strContext = getParam("txtContext");
 		order = getParam("tbOrder");
-
-		/*
-		 * mList = service.queryMsg(recipient, dateStart, dateEnd, context,
-		 * order);
-		 */
 
 		String strPage = getParam("page");
 
@@ -62,21 +57,21 @@ public class UserManagerAct extends ActionSupport {
 		}
 
 		this.pageBean = service.queryForPage(recipient, dateStart, dateEnd,
-				context, order, 5, this.page);// 获取封装了分页信息和数据的pageBean
+				strContext, order, 5, this.page);// 获取封装了分页信息和数据的pageBean
 		mList = this.pageBean.getList(); // 获取数据
 
 		return INPUT;
 	}
 
-	public String doQuery(int page) {
+	public String doQuery2(int page) {
 		recipient = getParam("txtRecipient");
 		dateStart = getParam("txtDateStart");
 		dateEnd = getParam("txtDateEnd");
-		context = getParam("txtContext");
+		strContext = getParam("txtContext");
 		order = getParam("tbOrder");
 
 		this.pageBean = service.queryForPage(recipient, dateStart, dateEnd,
-				context, order, 5, page);// 获取封装了分页信息和数据的pageBean
+				strContext, order, 5, page);// 获取封装了分页信息和数据的pageBean
 		mList = this.pageBean.getList(); // 获取数据
 
 		return INPUT;
@@ -191,7 +186,7 @@ public class UserManagerAct extends ActionSupport {
 		} catch (Exception e) {
 		}
 
-		doQuery(curPage);
+		doQuery2(curPage);
 
 		return "back";
 	}
@@ -236,8 +231,8 @@ public class UserManagerAct extends ActionSupport {
 		return dateEnd;
 	}
 
-	public String getcontext() {
-		return context;
+	public String getstrContext() {
+		return strContext;
 	}
 
 	public String getOrder() {

@@ -154,7 +154,7 @@
 <meta http-equiv="description" content="This is my page">
 </head>
 <body onload="load()">
-	<form name="formQuery" action="query.action" method="get"
+	<form name="formQuery" action="query.action" method="post"
 		id="frmfindId">
 		<table align="center">
 			<tr>
@@ -178,7 +178,7 @@
 				</td>
 				<td align="right">发送内容</td>
 				<td align="left"><input name="txtContext" type="text"
-					style="width: 180px;" value="${Context }" />
+					style="width: 180px;" value="${strContext }" />
 				</td>
 				<td><input id="btnQuery" type="submit" value="查询"
 					style="width: 100px;height: 30px;font-size: 16px" />
