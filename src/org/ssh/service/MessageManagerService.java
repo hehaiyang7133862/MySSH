@@ -85,6 +85,12 @@ public class MessageManagerService<T> {
 		}
 		int allRow = dao.getAllRowCount(queryString); // 总记录数
 		int totalPage = PageBean.countTatalPage(pageSize, allRow); // 总页数
+		
+		if(page >totalPage)
+		{
+			page =totalPage;
+		}
+		
 		final int offset = PageBean.countOffset(pageSize, page); // 当前页开始记录
 		final int length = pageSize; // 每页记录数
 		final int currentPage = PageBean.countCurrentPage(page); // 当前页

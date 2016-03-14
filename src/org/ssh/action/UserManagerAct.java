@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.print.Doc;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.ServletActionContext;
 import org.ssh.pojo.historyMsg;
@@ -133,6 +134,44 @@ public class UserManagerAct extends ActionSupport {
 		}
 
 		return "back";
+	}
+
+	public void doSave() throws Exception {
+		String resultstr = "";
+		try {
+			msg.setId(Integer.parseInt(getParam("tbId")));
+			msg.setDate((new SimpleDateFormat("yyyy-MM-dd"))
+					.parse(getParam("tbDate")));
+			msg.setRecName(getParam("tbRecName"));
+			msg.setTelNum(getParam("tbTelNum"));
+			msg.setYear(getParam("tbYear"));
+			msg.setSpecialty(getParam("tbSpecialty"));
+			msg.setContext(getParam("tbContext"));
+			service.modifyUser(msg);
+
+			resultstr = "success";
+		} catch (Exception e) {
+			resultstr = "fail";
+		}
+
+		sendResponse(ServletActionContext.getResponse(), resultstr);
+	}
+
+	/**
+	 * 向客户端发出文本内容
+	 * 
+	 * @param <HttpServletResponse>response 响应对象
+	 * @param <String>responseText 输出文本
+	 * @return void
+	 */
+	public void sendResponse(HttpServletResponse response, String responseText)
+			throws Exception {
+		response.setCharacterEncoding("utf-8");
+		response.setContentType("text/xml");
+		response.setHeader("Pragma", "No-Cache");
+		response.setHeader("Cache-Control", "No-Cache");
+		response.setDateHeader("Expires", 0L);
+		response.getWriter().println(responseText);
 	}
 
 	public String doDelete() throws NumberFormatException, Exception {
